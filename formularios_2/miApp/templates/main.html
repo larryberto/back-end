@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Formularios! 📄</h1>
+    {% if errores %}
+
+    {{form.errors}}
+        {%endif%}
+    <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">Enviar</button>
+    </form>
+
+    {% if personas %}
+    <ul>
+        {% for persona in personas %}
+        <li>{{persona.nombre}} {{persona.apellido}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>

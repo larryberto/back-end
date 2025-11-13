@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <style>
+        /* Estilos CSS para el estado */
+        .completada {
+            text-decoration: line-through;
+            color: green;
+        }
+        .pendiente {
+            color: red;
+            font-weight: bold;
+        }
+        .tarea-info {
+            display: inline-block;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestión de Tareas</h1>
+    
+    <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="tarea" placeholder="Tarea" required>
+        <input type="text" name="descripcion" placeholder="Descripción">
+        <button type="submit">Agregar Tarea</button>
+    </form>
+    
+    <hr>
+    
+    <h2>Lista de Tareas</h2>
+    
+    <ul>
+        {% for tarea in tareas %}
+            <li>
+                
+                <span class="tarea-info {% if tarea.completada %}completada{% else %}pendiente{% endif %}">
+                    <strong>{{ tarea.tarea }}</strong>: {{ tarea.descripcion }} - Creada el {{ tarea.fecha_creacion|date:"Y-m-d" }}
+                </span>
+                
+                <a href="{% url 'cambiar_estado' tarea.id %}" style="margin-left: 10px;">
+                    {% if tarea.completada %}
+                        [ Marcar como Pendiente ]
+                    {% else %}
+                        [ Marcar como Completada ]
+                    {% endif %}
+                </a>
+
+                <form action="{% url 'eliminar_tarea' tarea.id %}" method="POST" style="display:inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" style="color: darkred; border: none; background: none; cursor: pointer;">Eliminar</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No hay tareas disponibles.</li>
+        {% endfor %}
+    </ul>
+    
+</body>
+</html>
